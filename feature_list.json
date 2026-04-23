@@ -167,13 +167,13 @@
       "category": "ui",
       "description": "영양제 리스트 + 등록/편집",
       "steps": [
-        "src/pages/SupplementListPage.tsx (FAB + 리스트)",
-        "src/pages/SupplementEditPage.tsx (SearchField + TextField + SegmentedControl)",
+        "src/pages/SupplementListPage.tsx (리스트 + FAB + PRO 배지)",
+        "src/pages/SupplementEditPage.tsx (검색 + 폼 + 요일 + 상호작용 경고)",
         "src/data/supplementCatalog.ts (50건 시드)",
         "src/data/interactionRules.ts (20건)",
-        "무료 한도 3개 초과 시 페이월"
+        "무료 한도 3개 초과 시 페이월 자동 리다이렉트"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F015",
