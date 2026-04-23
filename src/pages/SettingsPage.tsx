@@ -140,7 +140,7 @@ export default function SettingsPage() {
         />
         {premium.status.active && premium.status.expiresAt && (
           <Row
-            label="다음 결제일"
+            label="이용권 만료일"
             right={<span style={{ fontSize: 13, color: '#4B5563' }}>{new Date(premium.status.expiresAt).toLocaleDateString('ko-KR')}</span>}
           />
         )}

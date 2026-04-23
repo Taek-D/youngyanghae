@@ -13,8 +13,8 @@ const PLANS: Array<{
   subLine?: string;
   recommended?: boolean;
 }> = [
-  { key: 'monthly', label: '월 구독', priceLine: `월 ₩${PREMIUM_PRICES_KRW.monthly.toLocaleString()}` },
-  { key: 'yearly', label: '연 구독', priceLine: `연 ₩${PREMIUM_PRICES_KRW.yearly.toLocaleString()}`, subLine: `월 ₩${Math.round(PREMIUM_PRICES_KRW.yearly / 12).toLocaleString()} — 35% ↓`, recommended: true },
+  { key: 'monthly', label: '1개월 이용권', priceLine: `₩${PREMIUM_PRICES_KRW.monthly.toLocaleString()}` },
+  { key: 'yearly', label: '12개월 이용권', priceLine: `₩${PREMIUM_PRICES_KRW.yearly.toLocaleString()}`, subLine: `월 ₩${Math.round(PREMIUM_PRICES_KRW.yearly / 12).toLocaleString()} — 35% ↓`, recommended: true },
   { key: 'lifetime', label: '평생 이용', priceLine: `₩${PREMIUM_PRICES_KRW.lifetime.toLocaleString()}` },
 ];
 

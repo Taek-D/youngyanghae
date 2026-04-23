@@ -7,9 +7,9 @@
  */
 
 export const IAP_SKU = {
-  /** 월 ₩3,900 구독 */
+  /** 월 ₩3,900 1개월 이용권 (비소모품 — 자동 갱신 없음) */
   monthly: 'ait.XXXXXX.yyh.monthly',
-  /** 연 ₩29,900 구독 (35% 할인) */
+  /** 연 ₩29,900 12개월 이용권 (35% 할인, 비소모품 — 자동 갱신 없음) */
   yearly: 'ait.XXXXXX.yyh.yearly',
   /** 일회성 ₩39,900 평생 이용 */
   lifetime: 'ait.XXXXXX.yyh.lifetime',
@@ -24,8 +24,8 @@ export const PREMIUM_PRICES_KRW = {
 } as const;
 
 export const PREMIUM_LABELS: Record<IAPSkuKey, string> = {
-  monthly: '월 구독',
-  yearly: '연 구독',
+  monthly: '1개월 이용권',
+  yearly: '12개월 이용권',
   lifetime: '평생 이용',
 };
 

@@ -261,6 +261,19 @@
         "추후 StreakCard 🔥, HomePage 🎉 콘텐츠 이모지는 유지 (콘텐츠 영역은 허용)"
       ],
       "passes": true
+    },
+    {
+      "id": "F022",
+      "category": "payment",
+      "description": "구독 오인 워딩 제거 (심사 반려 방지)",
+      "steps": [
+        "premiumConstants.ts: '월/연 구독' → '1개월/12개월 이용권' 라벨 교체",
+        "premiumConstants.ts: SKU 주석 '구독' → '이용권 (비소모품 — 자동 갱신 없음)' 정정",
+        "PaywallPage.tsx: PLANS 라벨 교체 + priceLine '월/연 ₩' → '₩' 단일 가격 표기",
+        "SettingsPage.tsx: '다음 결제일' → '이용권 만료일' 교체",
+        "38 tests PASS + tsc 0 errors 검증"
+      ],
+      "passes": true
     }
   ]
 }
