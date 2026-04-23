@@ -1,29 +1,33 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Brainstorm from "./pages/Brainstorm";
-import NotFound from "./pages/NotFound";
-
-const queryClient = new QueryClient();
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { PremiumProvider } from '@/contexts/PremiumContext';
+import { OnboardingGuard } from '@/components/OnboardingGuard';
+import IntroPage from '@/pages/IntroPage';
+import HomePage from '@/pages/HomePage';
+import SupplementListPage from '@/pages/SupplementListPage';
+import SupplementEditPage from '@/pages/SupplementEditPage';
+import HistoryPage from '@/pages/HistoryPage';
+import PaywallPage from '@/pages/PaywallPage';
+import SettingsPage from '@/pages/SettingsPage';
+import NotFound from '@/pages/NotFound';
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+  <PremiumProvider>
+    <BrowserRouter>
+      <OnboardingGuard>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/brainstorm" element={<Brainstorm />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/intro" element={<IntroPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/supplements" element={<SupplementListPage />} />
+          <Route path="/supplements/new" element={<SupplementEditPage />} />
+          <Route path="/supplements/:id" element={<SupplementEditPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/paywall" element={<PaywallPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+      </OnboardingGuard>
+    </BrowserRouter>
+  </PremiumProvider>
 );
 
 export default App;

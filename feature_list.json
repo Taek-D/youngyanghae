@@ -124,7 +124,7 @@
         "useSupplements, useIntake, useStreak, usePremium, usePoints, useRewardedAdFlow",
         "PremiumContext — 앱 시작 시 미결 주문 자동 복원"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F011",
@@ -135,7 +135,7 @@
         "localStorage 'youngyang:onboarding-completed' 가드",
         "첫 진입 시 /intro 리다이렉트"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F012",
@@ -146,7 +146,7 @@
         "로고 + 태그라인 + BottomCTA.Single",
         "appLogin() 앱 시작 호출 절대 금지"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F013",
