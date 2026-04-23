@@ -56,7 +56,7 @@
         "인덱스: by-date, by-supplement",
         "테스트: fake-indexeddb"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F005",
@@ -69,7 +69,7 @@
         "pointsRepository",
         "premiumRepository"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F006",
@@ -79,7 +79,7 @@
         "src/config/premiumConstants.ts (SKU, 가격, 무료한도)",
         "src/config/pointsConstants.ts (적립/사용량)"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F007",
