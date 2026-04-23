@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PremiumProvider } from '@/contexts/PremiumContext';
+import { DialogProvider } from '@/contexts/DialogContext';
 import { OnboardingGuard } from '@/components/OnboardingGuard';
 import IntroPage from '@/pages/IntroPage';
 import HomePage from '@/pages/HomePage';
@@ -11,9 +12,10 @@ import SettingsPage from '@/pages/SettingsPage';
 import NotFound from '@/pages/NotFound';
 
 const App = () => (
-  <PremiumProvider>
-    <BrowserRouter>
-      <OnboardingGuard>
+  <DialogProvider>
+    <PremiumProvider>
+      <BrowserRouter>
+        <OnboardingGuard>
         <Routes>
           <Route path="/intro" element={<IntroPage />} />
           <Route path="/" element={<HomePage />} />
@@ -25,9 +27,10 @@ const App = () => (
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </OnboardingGuard>
-    </BrowserRouter>
-  </PremiumProvider>
+        </OnboardingGuard>
+      </BrowserRouter>
+    </PremiumProvider>
+  </DialogProvider>
 );
 
 export default App;

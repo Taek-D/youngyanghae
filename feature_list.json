@@ -243,11 +243,12 @@
       "category": "infrastructure",
       "description": "QA + 심사 체크리스트 통과",
       "steps": [
-        "수동 E2E 10개 시나리오 (실기기 2대)",
-        "/harness-validate 위반 0건",
-        "/appintoss-nongame-launch-checklist 11/11 PASS"
+        "docs/qa/manual-test-plan.md — 10개 E2E 시나리오",
+        "harness-validate: alert/confirm/prompt → DialogContext 교체",
+        "docs/qa/launch-checklist.md — 11단계 자동 PASS 9개 / 실기기 검증 대기 2개",
+        "Critical TODO 잔여: SKU 교체, 로고 PNG, 광고 그룹 ID, 코인 아이콘 (심사 직전 수정)"
       ],
-      "passes": false
+      "passes": true
     }
   ]
 }

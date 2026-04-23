@@ -6,6 +6,7 @@ import { useStreak } from '@/hooks/useStreak';
 import { usePoints } from '@/hooks/usePoints';
 import { usePremiumContext } from '@/contexts/PremiumContext';
 import { useRewardedAdFlow } from '@/hooks/useRewardedAdFlow';
+import { useDialog } from '@/contexts/DialogContext';
 import { StreakCard } from '@/components/StreakCard';
 import { IntakeListRow } from '@/components/IntakeListRow';
 import { BottomTabBar } from '@/components/BottomTabBar';
@@ -30,6 +31,7 @@ export default function HomePage() {
   const points = usePoints();
   const premium = usePremiumContext();
   const ad = useRewardedAdFlow();
+  const dialog = useDialog();
 
   // 오늘 복용해야 할 (영양제, 슬롯) 페어 생성 후 슬롯별 그룹화
   const grouped = useMemo(() => {
@@ -62,8 +64,7 @@ export default function HomePage() {
   const onWatchAd = async () => {
     const result = await ad.watchAndEarn();
     if (result.rewarded) {
-      // Toast 대체 — TDS useToast로 추후 업그레이드
-      alert(`+${result.earned}p 받았어요!`);
+      await dialog.openAlert({ title: '포인트 적립!', description: `+${result.earned}p 받았어요` });
     }
   };
 

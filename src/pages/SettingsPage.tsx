@@ -7,6 +7,7 @@ import { BottomTabBar } from '@/components/BottomTabBar';
 import { resetDB_YYH } from '@/storage/db';
 import { buildSchedules, syncSchedules, clearAllSchedules } from '@/services/notificationService';
 import { DEFAULT_SLOT_TIMES, INTAKE_SLOT_LABEL, type IntakeSlot } from '@/types';
+import { useDialog } from '@/contexts/DialogContext';
 
 const NOTIF_ENABLED_KEY = 'youngyang:notifications-enabled';
 const NOTIF_TIMES_KEY = 'youngyang:notifications-times';
@@ -18,6 +19,7 @@ export default function SettingsPage() {
   const premium = usePremiumContext();
   const points = usePoints();
   const supplements = useSupplements();
+  const dialog = useDialog();
 
   const [notifEnabled, setNotifEnabled] = useState<boolean>(() => localStorage.getItem(NOTIF_ENABLED_KEY) !== '0');
   const [times, setTimes] = useState<Record<IntakeSlot, string>>(() => {
@@ -46,21 +48,33 @@ export default function SettingsPage() {
 
   const onRestore = async () => {
     await premium.restore();
-    alert('구매 내역을 확인했어요');
+    await dialog.openAlert({ title: '구매 내역 확인 완료', description: '프리미엄 상태를 최신화했어요' });
   };
 
-  const onRefundInfo = () => {
-    alert(
-      '환불은 토스 앱 > 전체 > 게임 > 프로필 > 구매내역에서 요청할 수 있어요.\n\n앱에서는 환불 기능을 제공하지 않아요. 환불 권한은 앱마켓(토스)에 있습니다.',
-    );
+  const onRefundInfo = async () => {
+    await dialog.openAlert({
+      title: '환불 안내',
+      description:
+        '환불은 토스 앱 > 전체 > 게임 > 프로필 > 구매내역에서 요청할 수 있어요.\n\n앱에서는 환불 기능을 제공하지 않아요. 환불 권한은 앱마켓(토스)에 있습니다.',
+    });
   };
 
   const onResetAll = async () => {
-    if (!confirm('모든 데이터를 삭제할까요? (영양제·기록·포인트·프리미엄 상태 전체)')) return;
-    if (!confirm('정말 삭제할까요? 되돌릴 수 없어요.')) return;
+    const first = await dialog.openConfirm({
+      title: '모든 데이터 삭제',
+      description: '영양제·기록·포인트·프리미엄 상태가 모두 삭제돼요.',
+      confirmLabel: '계속',
+    });
+    if (!first) return;
+    const second = await dialog.openConfirm({
+      title: '정말 삭제할까요?',
+      description: '되돌릴 수 없어요.',
+      confirmLabel: '삭제',
+    });
+    if (!second) return;
     await resetDB_YYH();
     localStorage.clear();
-    alert('모든 데이터가 초기화됐어요');
+    await dialog.openAlert({ title: '초기화 완료' });
     nav('/intro', { replace: true });
   };
 
@@ -151,8 +165,8 @@ export default function SettingsPage() {
 
       {/* 기타 */}
       <Section title="기타">
-        <RowButton label="이용약관" onClick={() => alert('이용약관 — 실제 URL로 교체 예정')} />
-        <RowButton label="개인정보처리방침" onClick={() => alert('개인정보처리방침 — 실제 URL로 교체 예정')} />
+        <RowButton label="이용약관" onClick={() => dialog.openAlert({ title: '이용약관', description: '실제 URL로 교체 예정입니다.' })} />
+        <RowButton label="개인정보처리방침" onClick={() => dialog.openAlert({ title: '개인정보처리방침', description: '실제 URL로 교체 예정입니다.' })} />
         <Row label="버전" right={<span style={{ fontSize: 13, color: '#6B7280' }}>v1.0.0</span>} />
       </Section>
 

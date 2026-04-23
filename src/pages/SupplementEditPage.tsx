@@ -6,6 +6,7 @@ import { catalog, searchCatalog, type CatalogItem } from '@/data/supplementCatal
 import { findInteractions } from '@/data/interactionRules';
 import { INTAKE_SLOT_LABEL, WEEKDAY_LABEL, type IntakeSlot, type Weekday } from '@/types';
 import { FREE_SUPPLEMENT_LIMIT } from '@/config/premiumConstants';
+import { useDialog } from '@/contexts/DialogContext';
 
 const SLOTS: IntakeSlot[] = ['morning', 'lunch', 'evening', 'bedtime'];
 const WEEKDAYS: Weekday[] = [0, 1, 2, 3, 4, 5, 6];
@@ -15,6 +16,7 @@ export default function SupplementEditPage() {
   const nav = useNavigate();
   const supplements = useSupplements();
   const premium = usePremiumContext();
+  const dialog = useDialog();
 
   const editing = id ? supplements.items.find((s) => s.id === id) : undefined;
 
@@ -74,15 +76,15 @@ export default function SupplementEditPage() {
 
   const onSave = async () => {
     if (!name.trim()) {
-      alert('영양제 이름을 입력해주세요');
+      await dialog.openAlert({ title: '이름을 입력해주세요' });
       return;
     }
     if (slots.length === 0) {
-      alert('복용 시간을 최소 하나 선택해주세요');
+      await dialog.openAlert({ title: '복용 시간을 최소 하나 선택해주세요' });
       return;
     }
     if (weekdays.length === 0) {
-      alert('요일을 최소 하나 선택해주세요');
+      await dialog.openAlert({ title: '요일을 최소 하나 선택해주세요' });
       return;
     }
 
@@ -114,7 +116,12 @@ export default function SupplementEditPage() {
 
   const onDelete = async () => {
     if (!editing) return;
-    if (!confirm(`${editing.name}을(를) 삭제할까요?`)) return;
+    const ok = await dialog.openConfirm({
+      title: '삭제',
+      description: `${editing.name}을(를) 삭제할까요?`,
+      confirmLabel: '삭제',
+    });
+    if (!ok) return;
     await supplements.remove(editing.id);
     nav('/supplements', { replace: true });
   };

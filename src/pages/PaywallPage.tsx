@@ -4,6 +4,7 @@ import { usePremiumContext } from '@/contexts/PremiumContext';
 import { usePoints } from '@/hooks/usePoints';
 import { PREMIUM_PRICES_KRW, type IAPSkuKey } from '@/config/premiumConstants';
 import { POINTS_SPEND } from '@/config/pointsConstants';
+import { useDialog } from '@/contexts/DialogContext';
 
 const PLANS: Array<{
   key: IAPSkuKey;
@@ -29,6 +30,7 @@ export default function PaywallPage() {
   const nav = useNavigate();
   const premium = usePremiumContext();
   const points = usePoints();
+  const dialog = useDialog();
   const [selected, setSelected] = useState<IAPSkuKey>('yearly');
   const [busy, setBusy] = useState(false);
 
@@ -37,12 +39,12 @@ export default function PaywallPage() {
     try {
       const result = await premium.buy(selected);
       if (result.ok) {
-        alert('영양해 프로로 업그레이드됐어요 ✨');
+        await dialog.openAlert({ title: '영양해 프로 🎉', description: '프로로 업그레이드됐어요' });
         nav('/', { replace: true });
       } else if (result.reason === 'canceled') {
         // 취소는 silent (노출 불필요)
       } else {
-        alert(result.message);
+        await dialog.openAlert({ title: '결제 실패', description: result.message });
       }
     } finally {
       setBusy(false);
@@ -52,14 +54,19 @@ export default function PaywallPage() {
   const onExchange1Day = async () => {
     const cost = POINTS_SPEND.premium_1d;
     if (points.balance < cost) {
-      alert(`포인트가 부족해요 (${cost - points.balance}p 더 필요)`);
+      await dialog.openAlert({ title: '포인트 부족', description: `${cost - points.balance}p 더 필요해요` });
       return;
     }
-    if (!confirm(`${cost}p로 프로 1일권을 받을까요?`)) return;
+    const ok = await dialog.openConfirm({
+      title: '프로 1일권 교환',
+      description: `${cost}p로 프로 1일권을 받을까요?`,
+      confirmLabel: '교환하기',
+    });
+    if (!ok) return;
     const r = await points.spend('spend_premium_1d', cost);
     if (!r.ok) return;
     await premium.grantByPoints('premium_1d');
-    alert('프로 1일권이 활성화됐어요');
+    await dialog.openAlert({ title: '프로 1일권 활성화', description: '24시간 동안 프로 기능을 사용할 수 있어요' });
     nav('/', { replace: true });
   };
 
