@@ -32,29 +32,93 @@
 
 ## 세션 기록
 
-### Session 1 — 2026-04-23 (프로젝트 초기화)
+### Session 1 — 2026-04-23 (프로젝트 초기화, F001)
+- ✅ Ouroboros 인터뷰 → seed.yaml (ambiguity 0.18)
+- ✅ design.md 6화면 TDS 와이어프레임
+- ✅ 24 Task / 6 Chunk 구현 플랜
+- ✅ granite.config.ts / index.html 브랜딩 "영양해" 통일 + viewport pinch-zoom off
+- ✅ feature_list.json 20기능 등록 (F001 only passes)
+- 커밋: ca25bc5
 
-완료:
-- ✅ Ouroboros 인터뷰 완료 (13개 결정 트랙, ambiguity 0.18)
-- ✅ Seed 스펙 크리스탈라이즈 (.ouroboros/seed.yaml)
-- ✅ TDS Mobile 기반 6개 화면 디자인 (.ouroboros/design.md)
-- ✅ 24 Tasks / 6 Chunks 구현 플랜 (docs/superpowers/plans/)
-- ✅ 앱 이름 확정: "영양해" (이전 후보 "먹었해"에서 변경)
-- ✅ granite.config.ts 생성 (appName=youngyanghae, displayName=영양해, primaryColor=#3182F6, navigationBar)
-- ✅ index.html 브랜딩 통일 + viewport user-scalable=no
-- ✅ feature_list.json 20개 기능 등록 (F001=passes:true, F002~F020=false)
+### Session 2 — 2026-04-23 (F002~F003: 의존성 + 도메인 타입)
+- ✅ npm install --legacy-peer-deps @toss/tds-mobile@2.3.0, @toss/tds-mobile-ait, @toss/tds-colors, @emotion/react@11, idb@8, fake-indexeddb
+- ✅ main.tsx에서 <TDSMobileAITProvider> 래핑
+- ✅ src/index.css에 --adaptiveFloatBackground #FFFFFF (해지해 학습)
+- ✅ SVG 플레이스홀더 로고 3개 (public/logo-light.svg, logo-dark.svg, icon-coin-mono.svg)
+- ✅ 도메인 타입 5개: supplement, intakeLog, streak, points, premium + barrel
+- ⚠️ 트러블: Korean path + npm optional deps → --no-optional + --legacy-peer-deps 우회
+- ⚠️ 트러블: @rollup/rollup-win32-x64-msvc 별도 설치 필요
+- 커밋: a672609
 
-다음 작업 (F002):
-- TDS Mobile 패키지 설치: `bun add @toss/tds-mobile @toss/tds-mobile-ait @toss/tds-colors @emotion/react@^11`
-- IndexedDB 래퍼 설치: `bun add idb`
-- fake-indexeddb (테스트용): `bun add -D fake-indexeddb`
-- src/main.tsx에서 <TDSMobileAITProvider> 래핑
-- src/styles.css (또는 src/index.css)에 `--adaptiveFloatBackground: #FFFFFF` 선언
+### Session 3 — 2026-04-23 (F004~F006: 저장소 + 상수)
+- ✅ src/storage/db.ts: IndexedDB v1 스키마 (7 object stores + 2 index)
+- ✅ Repository 5개 (supplement, intakeLog, streak, points, premium)
+- ✅ 비즈니스 상수: premiumConstants (SKU, 가격, 무료한도 3/7일), pointsConstants
+- ✅ TDD: 20 tests PASS (fake-indexeddb)
+- 커밋: db07d89
 
-주의사항:
-- 기존 Lovable 템플릿 코드(src/pages/Index.tsx, Brainstorm.tsx)는 F011(라우터 재구성) 단계에서 제거
-- 기존 react-router-dom@6 사용 중 (플랜의 react-router@7 대신) — 호환 유지
-- 기존 shadcn-ui 설치되어 있음 — TDS와 혼용 (해지해 패턴)
+### Session 4 — 2026-04-23 (F007~F009: 서비스 + TDD)
+- ✅ iapService: parseIAPError + purchase + getCompletedOrRefundedOrders (dynamic import)
+- ✅ adService: showRewardedAd (load→show 순서 엄수, userEarnedReward 이벤트)
+- ✅ streakService: computeNextStreak, shouldMilestoneReward, daysBetween, todayISO (TDD 13 tests)
+- ✅ src/lib/environment.ts: isTossApp()
+- 커밋: 1b5ee58
+
+### Session 5 — 2026-04-23 (F010~F012: 훅 + Context + 라우터)
+- ✅ 도메인 훅 6개: useSupplements, useIntake, useStreak, usePremium, usePoints, useRewardedAdFlow
+- ✅ PremiumContext: 앱 시작 시 자동 restore() (미결 주문 복원 + 환불 감지)
+- ✅ BrowserRouter 7 routes + OnboardingGuard (localStorage 'youngyang:onboarding-completed')
+- ✅ Legacy Lovable Index/Brainstorm 제거
+- ✅ 인트로 화면 구현 (appLogin() 호출 0건)
+- 커밋: af64672
+
+### Session 6 — 2026-04-23 (F013: HomePage 핵심 UX)
+- ✅ StreakCard / IntakeListRow (56px, 1-tap) / BottomTabBar (플로팅)
+- ✅ HomePage: 슬롯별 그룹화 + 요일 필터 + 1-tap 체크 + 마일스톤 포인트 적립
+- ✅ React 19 + TDS v2 런타임 호환 검증 (vite build 3.47s, tsc 0 errors)
+- ✅ Empty state / 모두 완료 시 광고 CTA
+- 결정: 네이티브 HTML + TDS 토큰 (컬러·타이포) 조합 — TDS v2 peer react@18까지 공식
+- 커밋: bbf30a2
+
+### Session 7 — 2026-04-23 (F014: 영양제 CRUD)
+- ✅ supplementCatalog.ts: 50건 시드 (종합비타민/오메가3/유산균/수면/저속노화/콜라겐/관절/눈/면역/혈행/다이어트/뷰티/시니어/키즈)
+- ✅ interactionRules.ts: 20건 성분 상호작용 규칙 (혈액응고/흡수방해/카페인 등)
+- ✅ SupplementListPage: 리스트 + FAB + PRO 배지 + 3개 한도 체크 → 페이월 리다이렉트
+- ✅ SupplementEditPage: 검색 자동완성 + 폼 + 슬롯 2×2 + 요일 7개 + 상호작용 경고 카드
+- 커밋: 80c817f
+
+### Session 8 — 2026-04-23 (F015~F017: History + Paywall + Ads)
+- ✅ adherence.ts 유틸: weekAdherence, supplementAdherence, last7/30Days (요일 필터 반영)
+- ✅ HistoryPage: 주/월/전체 토글 + 달성률 + 일별 도트 4단계 색 + 영양제별 progress + 페이월
+- ✅ PaywallPage: 3 플랜 라디오 + 포인트 교환 + 환불 안내 (심사 필수 문구)
+- ✅ 광고 통합 확인 (F010/F013에서 이미 완료)
+- 커밋: 702533f
+
+### Session 9 — 2026-04-23 (F018~F019: Settings + Notifications)
+- ✅ SettingsPage: 알림 Switch + 시간 피커 + 프리미엄 상태 + 구매 복원 + 환불 안내 + 데이터 초기화
+- ✅ notificationService: buildSchedules + syncSchedules (SDK scheduleLocalNotification) + clearAll
+- ✅ Settings에서 알림 토글·시간 변경 시 자동 re-sync
+- 재사용 컴포넌트: Section, Row, RowButton, Switch
+- 커밋: c8f3b7c
+
+### Session 10 — 2026-04-23 (F020: QA + Dialog 리팩터)
+- ✅ docs/qa/manual-test-plan.md: 10 시나리오 + 테스트 매트릭스
+- ✅ DialogContext: openAlert/openConfirm Promise API (심사 필수)
+- ✅ 14 에딧: 4 pages의 alert/confirm/prompt 전체 교체 (0건 달성)
+- ✅ docs/qa/launch-checklist.md: 11단계 자동 PASS 9 / 실기기 대기 2
+- ✅ 최종 빌드: 2.82s, 1.24MB (gzip 399KB), 38/38 tests PASS
+- 커밋: 34d4b9b
+
+---
+**상태 요약 (Session 11 시점)**: F001~F020 전체 완료. 코드 작업 여지: Important TODO (BottomTabBar 모노톤 SVG), Nice-to-have (code-splitting, TDS 네이티브 컴포넌트 마이그레이션).
+
+**Critical TODO (인간 작업 / 심사 제출 전)**:
+1. `IAP_SKU` 콘솔 발급 실제 값으로 교체 (premiumConstants.ts)
+2. `VITE_AD_GROUP_ID` .env 설정
+3. 디자이너 PNG 600×600 로고 교체
+4. 코인 아이콘 실제 이미지 교체
+
+**실기기 검증 필요**: IAP 4플로우 (성공/취소/실패/복원)
 
 ## 심사 반려 방지 체크포인트 (매 세션 확인)
 - [ ] alert/confirm/prompt → useDialog

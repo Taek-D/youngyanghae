@@ -249,6 +249,18 @@
         "Critical TODO 잔여: SKU 교체, 로고 PNG, 광고 그룹 ID, 코인 아이콘 (심사 직전 수정)"
       ],
       "passes": true
+    },
+    {
+      "id": "F021",
+      "category": "ui",
+      "description": "BottomTabBar 모노톤 SVG 아이콘 (심사 Important TODO)",
+      "steps": [
+        "src/components/icons.tsx: IconHome/Pill/Chart/Gear/Coin/Flame/Check (stroke + filled 변형)",
+        "BottomTabBar: 이모지 → SVG 아이콘 교체, 활성 시 blue500+filled, 비활성 grey500 stroke",
+        "aria-label / aria-current 접근성 추가",
+        "추후 StreakCard 🔥, HomePage 🎉 콘텐츠 이모지는 유지 (콘텐츠 영역은 허용)"
+      ],
+      "passes": true
     }
   ]
 }

@@ -1,21 +1,22 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IconHome, IconPill, IconChart, IconGear } from './icons';
 
 interface TabItem {
   path: string;
   label: string;
-  icon: string; // simple unicode/symbol — 추후 모노톤 SVG로 교체
+  Icon: (p: { size?: number; filled?: boolean; color?: string }) => JSX.Element;
 }
 
 const TABS: TabItem[] = [
-  { path: '/', label: '홈', icon: '🏠' },
-  { path: '/supplements', label: '영양제', icon: '💊' },
-  { path: '/history', label: '기록', icon: '📊' },
-  { path: '/settings', label: '설정', icon: '⚙️' },
+  { path: '/', label: '홈', Icon: IconHome },
+  { path: '/supplements', label: '영양제', Icon: IconPill },
+  { path: '/history', label: '기록', Icon: IconChart },
+  { path: '/settings', label: '설정', Icon: IconGear },
 ];
 
 /**
- * 하단 플로팅 탭바 — 모노톤 아이콘 원칙.
- * 현재 이모지는 프로토타입용 (심사 전 모노톤 SVG로 교체 필요).
+ * 하단 플로팅 탭바 — 모노톤 SVG 아이콘 (심사 규정 준수).
+ * 활성 상태: blue500 + filled, 비활성: grey500 + stroke only.
  */
 export function BottomTabBar() {
   const nav = useNavigate();
@@ -23,6 +24,7 @@ export function BottomTabBar() {
 
   return (
     <nav
+      aria-label="주요 탐색"
       style={{
         position: 'fixed',
         bottom: 16,
@@ -37,12 +39,14 @@ export function BottomTabBar() {
         zIndex: 10,
       }}
     >
-      {TABS.map((t) => {
-        const active = loc.pathname === t.path || (t.path !== '/' && loc.pathname.startsWith(t.path));
+      {TABS.map(({ path, label, Icon }) => {
+        const active = path === '/' ? loc.pathname === '/' : loc.pathname.startsWith(path);
         return (
           <button
-            key={t.path}
-            onClick={() => nav(t.path)}
+            key={path}
+            onClick={() => nav(path)}
+            aria-label={label}
+            aria-current={active ? 'page' : undefined}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -55,12 +59,12 @@ export function BottomTabBar() {
               cursor: 'pointer',
               fontFamily: 'inherit',
               minWidth: 56,
+              color: active ? '#3182F6' : '#6B7280',
+              transition: 'background 150ms, color 150ms',
             }}
           >
-            <span style={{ fontSize: 20, filter: active ? 'none' : 'grayscale(100%)' }}>{t.icon}</span>
-            <span style={{ fontSize: 11, color: active ? '#3182F6' : '#6B7280', fontWeight: active ? 600 : 400 }}>
-              {t.label}
-            </span>
+            <Icon size={22} filled={active} />
+            <span style={{ fontSize: 11, fontWeight: active ? 600 : 400 }}>{label}</span>
           </button>
         );
       })}
