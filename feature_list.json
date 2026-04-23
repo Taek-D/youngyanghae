@@ -91,7 +91,7 @@
         "Dynamic import + isSupported 체크",
         "createOneTimePurchaseOrder / getCompletedOrRefundedOrders"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F008",
@@ -102,7 +102,7 @@
         "loadFullScreenAd → showFullScreenAd 순서 엄수",
         "userEarnedReward 이벤트 처리"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F009",
@@ -114,7 +114,7 @@
         "shouldMilestoneReward (3/7/30일)",
         "TDD"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F010",

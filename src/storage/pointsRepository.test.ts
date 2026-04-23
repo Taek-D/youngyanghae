@@ -26,6 +26,7 @@ describe('pointsRepo', () => {
 
   it('spend reduces balance and records transaction', async () => {
     await pointsRepo.earn('ad_watch', 1000);
+    await new Promise(r => setTimeout(r, 5)); // ensure different createdAt for stable sort
     const next = await pointsRepo.spend('spend_premium_1d', 1000);
     expect(next).toBe(0);
     const hist = await pointsRepo.history();
