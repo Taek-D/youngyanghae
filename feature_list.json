@@ -181,12 +181,12 @@
       "description": "복용 히스토리 + 달성률 차트",
       "steps": [
         "src/pages/HistoryPage.tsx",
-        "SegmentedControl 주/월/전체",
-        "ProgressBar + 일별 도트",
-        "영양제별 달성률",
-        "8일 이전 데이터 페이월 블러"
+        "기간 토글 주/월/전체 (월·전체는 Pro)",
+        "전체 달성률 progress + 일별 도트 그리드",
+        "영양제별 복용률 (inline progress)",
+        "무료 사용자 페이월 CTA"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F016",
@@ -194,23 +194,23 @@
       "description": "페이월 + 결제 플로우",
       "steps": [
         "src/pages/PaywallPage.tsx",
-        "3 플랜 라디오 ListRow",
-        "포인트 교환 weak Button",
-        "환불 안내 문구 (심사 필수)",
-        "IAP 실패/취소 TDS Dialog 처리"
+        "3 플랜 라디오 선택",
+        "포인트 교환 (1000p → 1일권)",
+        "환불 안내 문구 포함 (심사 필수)",
+        "buy() 성공/취소/실패 처리"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F017",
       "category": "ads",
       "description": "보상형 광고 + 포인트 자동 적립",
       "steps": [
-        "useRewardedAdFlow 훅",
-        "홈 모두 완료 시 weak Button",
+        "useRewardedAdFlow 훅 (F010에서 구현)",
+        "HomePage 모두 완료 시 weak Button",
         "프리미엄은 광고 숨김"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F018",
