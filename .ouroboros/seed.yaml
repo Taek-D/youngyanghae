@@ -1,0 +1,231 @@
+# Ouroboros Seed Specification
+# Generated: 2026-04-23
+# Project: 앱인토스 영양제 루틴 트래커 미니앱
+# Session: interview (Path B, plugin fallback)
+
+goal: >-
+  앱인토스에 출시할 "영양제 복용 루틴 트래커" 비게임 미니앱을 3~4주 내 풀 MVP로 구축한다.
+  20~30대 직장인을 타겟으로 1-tap 극단적 심플함과 앱 내 포인트 리워드로 기존 약알람·필리앱과 차별화하고,
+  해지해(이미 런칭된 구독관리 미니앱) 아키텍처를 그대로 계승하여 개발 속도를 극대화한다.
+  수익 모델은 보상형 광고 + 프리미엄 IAP 하이브리드(해지해 모델), 프리미엄 가격은 월 ₩3,900 / 연 ₩29,900 / 일회성 ₩39,900.
+
+constraints:
+  # 앱인토스 심사 규칙 (NEVER)
+  - NEVER use alert()/confirm()/prompt() — TDS Dialog 또는 shadcn AlertDialog 사용
+  - NEVER implement custom back button or top header — 공통 네비게이션바만 사용
+  - NEVER implement hamburger menu
+  - NEVER enable pinch zoom — viewport meta user-scalable=no 필수
+  - NEVER use colored icons for navigation accessory buttons (모노톤만)
+  - NEVER call appLogin() on app start — 인트로 화면 먼저
+  - NEVER expose Toss OAuth tokens to client
+  - NEVER navigate to external apps/browsers for core features
+  - NEVER insert app install promotion text/banner
+  - NEVER link to external payment pages
+  # 앱인토스 심사 규칙 (ALWAYS)
+  - ALWAYS set navigationBar withBackButton=true, withHomeButton=true
+  - ALWAYS match app name exactly across granite.config.ts / index.html / og:title / console
+  - ALWAYS use 한글 브랜딩 (토스 O, Toss X)
+  - ALWAYS use dynamic import + isSupported() for AppsInToss SDK
+  # 기술 스택 (해지해 계승)
+  - 서버 없음 — IndexedDB 로컬 저장소
+  - TypeScript + React + Vite + bun
+  - TDS Mobile + shadcn-ui 혼용 (TDS adaptiveFloatBackground #FFFFFF 설정 필수)
+  - IAP 비소모품 상품 (신규 SKU 발급)
+  - 보상형 광고: loadFullScreenAd → showFullScreenAd 순서 준수
+  # 범위
+  - MVP는 3~4주, 서버/가족공유/토스 Promotion Reward/OCR/바코드는 v2 이후
+
+acceptance_criteria:
+  # 심사 (Done 기준 1)
+  - 앱인토스 비게임 심사 1회 제출 후 승인 (NEVER/ALWAYS 규칙 위반 0건)
+  - appintoss-nongame-launch-checklist 11단계 전통과
+  # 코어 루프 (Done 기준 2)
+  - 영양제 등록(수동 또는 내부 DB 검색) → 복용 알림 수신 → 1-tap 체크 → 스트릭 적립 → 포인트 획득 → 프리미엄 1일권 교환 E2E 통과
+  - 매일 복용 체크가 알림 푸시 탭부터 완료까지 3초 이내 1-tap으로 완결
+  - 스트릭이 끊겼을 때 포인트로 복구권 사용 가능
+  # 결제 (Done 기준 3)
+  - IAP 결제 성공/실패/취소/복원 4가지 플로우 모두 실기기 토스앱에서 검증
+  - 4중 프리미엄 게이팅 동작 (영양제 3개 제한 / 히스토리 7일 제한 / 보상형 광고 노출 / 월간 리포트·성분 경고 잠금)
+  - 미결 주문 자동 복원 (앱 강제 종료 → 재진입)
+  - 환불 감지 → 프리미엄 해제 (getCompletedOrRefundedOrders 폴링)
+  # 비기능
+  - 브랜딩 완전 일치 (granite.config.ts brand.displayName / index.html title / og / 콘솔)
+  - 다크모드/라이트모드 모두 가시적 로고 (600x600 각진 정사각형)
+  - 핀치줌 비활성화
+  - 첫 화면 뒤로가기 = 미니앱 종료 (리프레시 아님)
+
+ontology:
+  name: SupplementRoutineTracker
+  description: >-
+    20~30대 직장인 대상 영양제 복용 루틴 트래커 도메인 모델.
+    영양제 등록, 복용 기록, 스트릭, 앱 내 포인트, 프리미엄 상태, 성분 상호작용 경고를 포함한다.
+  fields:
+    - name: supplements
+      type: array
+      description: 등록된 영양제 목록 (id, name, brand, dose, schedule[times,days], createdAt)
+    - name: intakeLogs
+      type: array
+      description: 일별 복용 기록 (id, supplementId, date, scheduledTime, takenAt, status: taken/skipped/missed)
+    - name: streaks
+      type: object
+      description: 연속 복용 상태 (currentDays, longestDays, lastCheckDate, freezesUsedThisWeek)
+    - name: points
+      type: number
+      description: 앱 내 적립 포인트 현재 잔액
+    - name: pointsTransactions
+      type: array
+      description: 포인트 적립/사용 내역 (id, type: earn/spend, source, amount, createdAt)
+    - name: premiumStatus
+      type: object
+      description: 프리미엄 구독 상태 (active, plan: monthly/yearly/lifetime/grantedByPoints, sku, expiresAt, source: iap/points)
+    - name: pendingOrders
+      type: array
+      description: IAP 미결 주문 (앱 시작 시 자동 복원)
+    - name: userSettings
+      type: object
+      description: 알림 시간, 테마, 온보딩 완료 여부, 공통 알림 시간대
+    - name: supplementCatalog
+      type: array
+      description: 내부 영양제 DB (id, name, ingredients[], tags, commonDosage)
+    - name: interactionRules
+      type: array
+      description: 성분 상호작용 경고 규칙 (ingredientA, ingredientB, severity, message)
+
+evaluation_principles:
+  - name: 앱인토스_컴플라이언스
+    description: NEVER/ALWAYS 규칙 위반 0건, launch-checklist 11단계 전통과
+    weight: 1.0
+  - name: 극단적_심플
+    description: 매일 복용 체크가 알림부터 완료까지 1-tap, 3초 이내
+    weight: 0.9
+  - name: 해지해_일관성
+    description: IAP/프리미엄/IndexedDB/환불감지 패턴을 동일하게 재사용, 이름·SKU만 다름
+    weight: 0.85
+  - name: 수익화_루프_닫힘
+    description: 무료→광고시청→포인트→프리미엄교환 / 스트릭→복구권 두 루프가 자연스럽게 연결
+    weight: 0.85
+  - name: 실기기_검증
+    description: 샌드박스 UserAgent IAP 제한 감안, 실기기 토스앱에서 최소 2대 검증
+    weight: 0.9
+  - name: 장기_리텐션
+    description: 스트릭·복구권·리워드로 D7 리텐션 30%+, D30 15%+ 목표
+    weight: 0.7
+  - name: 브랜딩_통일성
+    description: 해지해 라인 브랜드로 앱 이름·로고 일관성, 모든 노출 지점 정확 일치
+    weight: 0.75
+
+exit_conditions:
+  - name: 심사_통과
+    description: 앱인토스 콘솔 심사 최종 승인
+    criteria: launch-checklist 11단계 + 심사 제출 → 1회차 승인
+  - name: 수익_플로우_실검증
+    description: 실기기 토스앱에서 실결제 1건 성공
+    criteria: IAP purchase → REFUNDED 제외 상태 서버 없이 로컬 반영
+  - name: 리텐션_초기_관찰
+    description: 런칭 후 3개월 기준 MAU/리텐션 관찰
+    criteria: MAU 500+ AND D7 리텐션 30%+
+
+project_type: greenfield
+# 해지해는 "reference" 레벨 — 코드를 fork하지 않고 패턴만 참조
+
+context_references:
+  - path: E:\프로젝트\앱인토스\해지해
+    role: reference
+    summary: 검증된 IAP+프리미엄+IndexedDB 아키텍처 원본. PremiumContext/IAPService/PremiumRepository 3-layer, 환불 감지, 미결 주문 복원, 4중 게이팅 패턴 그대로 재사용
+  - path: apps-in-toss-examples-robin\_template
+    role: primary
+    summary: 앱인토스 프로젝트 보일러플레이트 시작점
+  - path: apps-in-toss-examples-robin\with-in-app-purchase
+    role: reference
+    summary: IAP SDK 사용 레퍼런스 (createOneTimePurchaseOrder, getCompletedOrRefundedOrders)
+  - path: apps-in-toss-examples-robin\with-rewarded-ad
+    role: reference
+    summary: 보상형 광고 SDK 레퍼런스 (loadFullScreenAd, showFullScreenAd, userEarnedReward)
+  - path: apps-in-toss-examples-robin\with-navigation-bar
+    role: reference
+    summary: 공통 네비게이션바 구성 레퍼런스
+  - path: apps-in-toss-examples-robin\with-app-login
+    role: reference
+    summary: appLogin 인트로 지연 패턴 (앱 시작 직후 로그인 금지 규정 준수)
+  - path: .claude\skills\appintoss-tds-mobile
+    role: reference
+    summary: TDS Mobile 컴포넌트/색/타이포 가이드
+  - path: .claude\skills\appintoss-nongame-launch-checklist
+    role: reference
+    summary: 출시 전 11단계 심사 체크리스트 — 코드 완료 후 필수 실행
+  - path: .claude\skills\harness-init
+    role: reference
+    summary: granite.config.ts + 브랜딩 + viewport 반려방지 초기 세팅
+  - path: .claude\skills\harness-progress
+    role: reference
+    summary: 세션당 1기능 점진적 구현, feature_list.json 기반 추적
+  - path: .claude\skills\harness-validate
+    role: reference
+    summary: NEVER/ALWAYS 규칙 자동 위반 탐지
+  - path: CLAUDE.md
+    role: primary
+    summary: 프로젝트 루트 CLAUDE.md — 앱인토스 심사 규칙 완전판
+
+existing_patterns:
+  - 3-layer premium 아키텍처 (types/premium.ts → storage/premiumRepository.ts → services/iapService.ts → hooks/usePremium.ts → contexts/PremiumContext.tsx)
+  - IndexedDB 영속화 (해지해는 idb 사용) — 영양제 앱도 동일
+  - TDS adaptiveFloatBackground #FFFFFF 선언 (Dialog 투명 버그 방지)
+  - Dynamic import + isSupported 체크 (SDK 안전 호출)
+  - 환불 감지 폴링 (getCompletedOrRefundedOrders) → 프리미엄 해제
+  - 미결 주문 앱 시작 시 자동 복원
+  - 한글 임팩트 브랜딩 + 모노톤 네비게이션 아이콘
+  - 무료 게이팅 상수 관리 (premiumConstants.ts)
+
+existing_dependencies:
+  - "@apps-in-toss/web-framework"
+  - "@toss/tds-mobile"
+  - shadcn-ui (radix-ui 기반)
+  - React 18+
+  - TypeScript 5+
+  - Vite
+  - bun (build/test/lint)
+  - idb (IndexedDB wrapper)
+
+proposed_defaults:
+  # Seed 단계에서 인터뷰 중 미확정된 세부 수치 기본값 제안
+  app_name_final: 영양해
+  app_name_rationale: "가장 직관적, 검색 유리, '영양 + 해' 짧고 외우기 쉬움, 해지해 라인의 '해' 어미 공유"
+  app_name_alternatives_considered:
+    - 먹었해 — 질문형 대칭이지만 의미 범위가 좁음
+    - 챙겼해 — 책임감 강하나 검색성 낮음
+    - 쏙쏙해 — 귀여움 강점이나 타겟(20~30대 직장인) 톤과 덜 맞음
+    - 잘먹어 — 친근하나 '해' 라인 일관성 약함
+  free_history_days: 7
+  points_economy:
+    ad_watch_reward: 50
+    streak_3_days: 100
+    streak_7_days: 200
+    streak_30_days: 1000
+    streak_freeze_cost: 500
+    premium_1day_exchange: 1000
+    premium_7day_exchange: 5000
+  premium_pricing:
+    monthly_krw: 3900
+    yearly_krw: 29900
+    yearly_discount_pct: 35
+    lifetime_krw: 39900
+  notification_defaults:
+    morning: "08:00"
+    lunch: "12:30"
+    evening: "19:00"
+    bedtime: "22:00"
+  target_timeline_weeks: 3
+  internal_supplement_db_seed_count: 50
+  interaction_rules_seed_count: 20
+
+metadata:
+  version: "0.1.0"
+  generated_at: "2026-04-23"
+  interview_mode: "plugin-fallback (Path B)"
+  ambiguity_score: 0.18
+  ambiguity_notes: >-
+    인터뷰는 컨셉/타겟/차별화/수익/등록/게이팅/포인트/MVP/기술/브랜드방향/무료한도/가격/Done기준까지 13개 트랙 커버.
+    미결정 세부(앱 이름 최종, 히스토리 기간 수치, 포인트 환율, 스트릭 복구권 비용)는 proposed_defaults로 제안.
+    사용자 승인 시 확정. Score는 <= 0.2 목표 달성.
+  project: "앱인토스 영양제 루틴 트래커"
+  parent_brand: "해지해"

@@ -1,0 +1,249 @@
+{
+  "project": "영양해",
+  "appName": "youngyanghae",
+  "displayName": "영양해",
+  "appType": "non-game",
+  "primaryColor": "#3182F6",
+  "parentBrand": "해지해",
+  "created": "2026-04-23",
+  "seed": ".ouroboros/seed.yaml",
+  "design": ".ouroboros/design.md",
+  "plan": "docs/superpowers/plans/2026-04-23-youngyanghae.md",
+  "features": [
+    {
+      "id": "F001",
+      "category": "infrastructure",
+      "description": "프로젝트 초기 세팅 (반려방지)",
+      "steps": [
+        "granite.config.ts 생성",
+        "index.html viewport user-scalable=no + 브랜딩 통일",
+        "feature_list.json + claude-progress.txt 생성"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F002",
+      "category": "infrastructure",
+      "description": "TDS Mobile + 의존성 추가 + Provider 래핑",
+      "steps": [
+        "@toss/tds-mobile, @toss/tds-mobile-ait, @toss/tds-colors, @emotion/react 설치",
+        "idb 설치 (IndexedDB 래퍼)",
+        "TDSMobileAITProvider로 App 래핑",
+        "styles.css에 --adaptiveFloatBackground #FFFFFF 선언"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F003",
+      "category": "infrastructure",
+      "description": "도메인 타입 정의",
+      "steps": [
+        "src/types/supplement.ts",
+        "src/types/intakeLog.ts",
+        "src/types/streak.ts",
+        "src/types/points.ts",
+        "src/types/premium.ts"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F004",
+      "category": "infrastructure",
+      "description": "IndexedDB 스키마 + 마이그레이션",
+      "steps": [
+        "src/storage/db.ts (openDB_YYH)",
+        "object stores: supplements, intakeLogs, streak, points, pointsTx, premium, pendingOrders",
+        "인덱스: by-date, by-supplement",
+        "테스트: fake-indexeddb"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F005",
+      "category": "infrastructure",
+      "description": "Repository 레이어 CRUD + TDD",
+      "steps": [
+        "supplementRepository",
+        "intakeLogRepository",
+        "streakRepository",
+        "pointsRepository",
+        "premiumRepository"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F006",
+      "category": "infrastructure",
+      "description": "비즈니스 룰 상수",
+      "steps": [
+        "src/config/premiumConstants.ts (SKU, 가격, 무료한도)",
+        "src/config/pointsConstants.ts (적립/사용량)"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F007",
+      "category": "payment",
+      "description": "IAP 서비스 래퍼",
+      "steps": [
+        "src/services/iapService.ts",
+        "parseIAPError 에러코드 매핑",
+        "Dynamic import + isSupported 체크",
+        "createOneTimePurchaseOrder / getCompletedOrRefundedOrders"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F008",
+      "category": "ads",
+      "description": "보상형 광고 서비스",
+      "steps": [
+        "src/services/adService.ts",
+        "loadFullScreenAd → showFullScreenAd 순서 엄수",
+        "userEarnedReward 이벤트 처리"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F009",
+      "category": "logic",
+      "description": "스트릭 계산 + 마일스톤 리워드",
+      "steps": [
+        "src/services/streakService.ts",
+        "computeNextStreak (gap=0/1/>1)",
+        "shouldMilestoneReward (3/7/30일)",
+        "TDD"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F010",
+      "category": "logic",
+      "description": "도메인 훅 + PremiumContext",
+      "steps": [
+        "useSupplements, useIntake, useStreak, usePremium, usePoints, useRewardedAdFlow",
+        "PremiumContext — 앱 시작 시 미결 주문 자동 복원"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F011",
+      "category": "ui",
+      "description": "라우터 + 온보딩 가드",
+      "steps": [
+        "src/router.tsx — 7개 라우트",
+        "localStorage 'youngyang:onboarding-completed' 가드",
+        "첫 진입 시 /intro 리다이렉트"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F012",
+      "category": "ui",
+      "description": "인트로 화면 (appLogin 금지 규정 준수)",
+      "steps": [
+        "src/pages/IntroPage.tsx",
+        "로고 + 태그라인 + BottomCTA.Single",
+        "appLogin() 앱 시작 호출 절대 금지"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F013",
+      "category": "ui",
+      "description": "홈 — 1-tap 복용 체크 (핵심 UX)",
+      "steps": [
+        "StreakCard 컴포넌트",
+        "IntakeListRow — 56px 최소 높이, ListRow + Checkbox.Circle",
+        "슬롯별 그룹 (아침/점심/저녁/취침)",
+        "모두 완료 시 광고 CTA",
+        "BottomTabBar (모노톤)"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F014",
+      "category": "ui",
+      "description": "영양제 리스트 + 등록/편집",
+      "steps": [
+        "src/pages/SupplementListPage.tsx (FAB + 리스트)",
+        "src/pages/SupplementEditPage.tsx (SearchField + TextField + SegmentedControl)",
+        "src/data/supplementCatalog.ts (50건 시드)",
+        "src/data/interactionRules.ts (20건)",
+        "무료 한도 3개 초과 시 페이월"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F015",
+      "category": "ui",
+      "description": "복용 히스토리 + 달성률 차트",
+      "steps": [
+        "src/pages/HistoryPage.tsx",
+        "SegmentedControl 주/월/전체",
+        "ProgressBar + 일별 도트",
+        "영양제별 달성률",
+        "8일 이전 데이터 페이월 블러"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F016",
+      "category": "payment",
+      "description": "페이월 + 결제 플로우",
+      "steps": [
+        "src/pages/PaywallPage.tsx",
+        "3 플랜 라디오 ListRow",
+        "포인트 교환 weak Button",
+        "환불 안내 문구 (심사 필수)",
+        "IAP 실패/취소 TDS Dialog 처리"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F017",
+      "category": "ads",
+      "description": "보상형 광고 + 포인트 자동 적립",
+      "steps": [
+        "useRewardedAdFlow 훅",
+        "홈 모두 완료 시 weak Button",
+        "프리미엄은 광고 숨김"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F018",
+      "category": "ui",
+      "description": "설정 화면",
+      "steps": [
+        "알림 Switch + 시간 피커 BottomSheet",
+        "프리미엄 상태 + 구매 복원",
+        "환불 안내 (공식 문구 심사 필수)",
+        "이용약관/개인정보/오픈소스",
+        "데이터 초기화 (이중 확인)"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F019",
+      "category": "infrastructure",
+      "description": "로컬 푸시 알림",
+      "steps": [
+        "src/services/notificationService.ts",
+        "영양제 등록 시 슬롯/요일별 자동 스케줄"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F020",
+      "category": "infrastructure",
+      "description": "QA + 심사 체크리스트 통과",
+      "steps": [
+        "수동 E2E 10개 시나리오 (실기기 2대)",
+        "/harness-validate 위반 0건",
+        "/appintoss-nongame-launch-checklist 11/11 PASS"
+      ],
+      "passes": false
+    }
+  ]
+}
