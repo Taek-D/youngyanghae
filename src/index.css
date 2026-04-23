@@ -86,8 +86,12 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    /* TDS Mobile 필수 — 해지해에서 학습: 미설정 시 Dialog 투명 버그 */
+    --adaptiveFloatBackground: #FFFFFF;
+    --adaptiveBackground: #FFFFFF;
+
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 5%;
     --card-foreground: 0 0% 100%;

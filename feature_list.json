@@ -31,7 +31,7 @@
         "TDSMobileAITProvider로 App 래핑",
         "styles.css에 --adaptiveFloatBackground #FFFFFF 선언"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F003",
@@ -44,7 +44,7 @@
         "src/types/points.ts",
         "src/types/premium.ts"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F004",

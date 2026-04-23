@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <!-- TODO: 최종 디자이너 로고로 교체 (다크모드 가시 버전) -->
+  <rect width="600" height="600" fill="#1F2937"/>
+  <g fill="#FFFFFF">
+    <rect x="180" y="240" width="240" height="120" rx="60"/>
+    <rect x="180" y="240" width="120" height="120" rx="60" fill="#74B8FF"/>
+    <path d="M 410 275 L 430 295 L 465 260" stroke="#3182F6" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <text x="300" y="450" font-family="'Toss Product Sans', sans-serif" font-size="72" font-weight="700" text-anchor="middle" fill="#FFFFFF">영양해</text>
+</svg>
