@@ -439,9 +439,9 @@ git commit -m "feat: repository layer with CRUD for all domain stores"
 ```ts
 // src/config/premiumConstants.ts
 export const IAP_SKU = {
-  monthly: 'ait.XXXXXX.yyh.monthly',    // 실제 발급 SKU로 교체
-  yearly:  'ait.XXXXXX.yyh.yearly',
-  lifetime:'ait.XXXXXX.yyh.lifetime',
+  monthly: 'ait.0000029518.4fd8f444.24f2107fa9.7129637158', // 콘솔 발급 (2026-04-26)
+  yearly:  'ait.0000029518.dc3ba407.96ee8beab3.7129669832',
+  lifetime:'ait.0000029518.4703587e.85fd9dff01.7129714550',
 } as const;
 
 export const PREMIUM_PRICES_KRW = {

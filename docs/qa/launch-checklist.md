@@ -84,12 +84,12 @@ navigationBar: {
 - [ ] 구매 복원 (앱 삭제→재설치)
 - [ ] 환불 감지 (`getCompletedOrRefundedOrders` 폴링)
 
-**SKU 발급 필요**:
+**SKU 발급 완료** (2026-04-26):
 ```ts
-// src/config/premiumConstants.ts — 실제 SKU로 교체
-IAP_SKU.monthly  → 'ait.XXXXXX.yyh.monthly'
-IAP_SKU.yearly   → 'ait.XXXXXX.yyh.yearly'
-IAP_SKU.lifetime → 'ait.XXXXXX.yyh.lifetime'
+// src/config/premiumConstants.ts — 콘솔 발급 실 SKU 적용
+IAP_SKU.monthly  = 'ait.0000029518.4fd8f444.24f2107fa9.7129637158'
+IAP_SKU.yearly   = 'ait.0000029518.dc3ba407.96ee8beab3.7129669832'
+IAP_SKU.lifetime = 'ait.0000029518.4703587e.85fd9dff01.7129714550'
 ```
 
 ## 10. 환불 안내 문구 ✅

@@ -8,11 +8,11 @@
 
 export const IAP_SKU = {
   /** 월 ₩3,900 1개월 이용권 (비소모품 — 자동 갱신 없음) */
-  monthly: 'ait.XXXXXX.yyh.monthly',
+  monthly: 'ait.0000029518.4fd8f444.24f2107fa9.7129637158',
   /** 연 ₩29,900 12개월 이용권 (35% 할인, 비소모품 — 자동 갱신 없음) */
-  yearly: 'ait.XXXXXX.yyh.yearly',
+  yearly: 'ait.0000029518.dc3ba407.96ee8beab3.7129669832',
   /** 일회성 ₩39,900 평생 이용 */
-  lifetime: 'ait.XXXXXX.yyh.lifetime',
+  lifetime: 'ait.0000029518.4703587e.85fd9dff01.7129714550',
 } as const;
 
 export type IAPSkuKey = keyof typeof IAP_SKU;
