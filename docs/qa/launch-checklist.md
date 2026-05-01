@@ -114,10 +114,10 @@ IAP_SKU.lifetime = 'ait.0000029518.4703587e.85fd9dff01.7129714550'
 ## 🔧 잔여 심사 전 TODO
 
 ### Critical (심사 직전 필수)
-1. **SKU 교체**: `src/config/premiumConstants.ts` — 콘솔 발급 실제 SKU
-2. **광고 그룹 ID**: `.env` → `VITE_AD_GROUP_ID` 실제 값
-3. **로고 PNG**: `public/logo-{light,dark}.svg` → 디자이너 600×600 PNG
-4. **코인 아이콘**: `public/icon-coin-mono.svg` → 실제 모노톤 이미지
+1. ✅ **SKU 교체** (2026-04-26 완료): `src/config/premiumConstants.ts`
+2. ✅ **광고 그룹 ID** (2026-04-26 완료): `.env` → `VITE_AD_GROUP_ID=ait.v2.live.3b81e8afba074454`
+3. ⏳ **로고 PNG**: `public/logo-{light,dark}.svg` → 디자이너 600×600 PNG
+4. ⏳ **코인 아이콘**: `public/icon-coin-mono.svg` → 실제 모노톤 이미지
 
 ### Important
 5. **BottomTabBar 이모지**: 모노톤 SVG 아이콘 교체 (심사는 통과하지만 UX 개선)
