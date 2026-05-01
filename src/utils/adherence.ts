@@ -17,9 +17,13 @@ export interface SupplementAdherence {
 }
 
 export function addDays(dateISO: string, days: number): string {
-  const d = new Date(dateISO + 'T00:00:00');
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  // 🚨 timezone-safe: UTC로 일관 처리.
+  // 'T00:00:00' (no Z)로 파싱하면 로컬 자정으로 해석되어 toISOString이 9시간 어긋남(KST).
+  // 결과가 입력과 같아져서 weekAdherence의 while 루프가 무한 진행 → 미니앱 크래시.
+  const [y, m, d] = dateISO.split('-').map(Number);
+  const utc = new Date(Date.UTC(y, m - 1, d));
+  utc.setUTCDate(utc.getUTCDate() + days);
+  return utc.toISOString().slice(0, 10);
 }
 
 /** fromISO~toISO 범위에서 일별 달성률 계산 (요일 필터 반영) */
