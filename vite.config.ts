@@ -5,6 +5,9 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // 앱인토스 미니앱 webview는 root가 아닌 가상 origin에서 로드되므로
+  // asset 경로를 상대경로(./assets/...)로 빌드해야 한다.
+  base: './',
   server: {
     host: "::",
     port: 8080,

@@ -34,3 +34,7 @@ dist-ssr
 .ouroboros/state/
 .claude/
 docs/.pdca-snapshots/
+
+# 앱인토스 빌드 산출물 (콘솔 업로드 후 보관 불필요, 4MB 바이너리)
+.granite/
+*.ait

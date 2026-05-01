@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { PremiumProvider } from '@/contexts/PremiumContext';
 import { DialogProvider } from '@/contexts/DialogContext';
 import { OnboardingGuard } from '@/components/OnboardingGuard';
@@ -14,7 +14,8 @@ import NotFound from '@/pages/NotFound';
 const App = () => (
   <DialogProvider>
     <PremiumProvider>
-      <BrowserRouter>
+      {/* HashRouter — 앱인토스 webview는 history.pushState 보장 X. # 기반 라우팅이 안전 */}
+      <HashRouter>
         <OnboardingGuard>
         <Routes>
           <Route path="/intro" element={<IntroPage />} />
@@ -28,7 +29,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         </OnboardingGuard>
-      </BrowserRouter>
+      </HashRouter>
     </PremiumProvider>
   </DialogProvider>
 );
