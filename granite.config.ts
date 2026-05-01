@@ -14,7 +14,9 @@ export default defineConfig({
   brand: {
     displayName: '영양해',
     primaryColor: '#3182F6', // TDS blue500 — 해지해 라인 일관성
+    icon: './public/logo-light.png', // SDK 2.4.7+ 필수 필드
   },
+  permissions: [], // SDK 2.4.7+ 필수 필드 (영양해는 카메라/위치 등 권한 미사용)
   navigationBar: {
     withBackButton: true,
     withHomeButton: true,
