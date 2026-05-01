@@ -76,7 +76,7 @@ export default function PaywallPage() {
     <div style={{ padding: '16px 20px 96px', background: '#FFFFFF', minHeight: '100vh' }}>
       {/* 헤더 */}
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <img src="/logo-light.svg" alt="영양해 프로" width={80} height={80} />
+        <img src="/logo-light.png" alt="영양해 프로" width={80} height={80} />
         <h1 style={{ fontSize: 30, fontWeight: 700, color: '#191F28', margin: '12px 0 4px' }}>영양해 프로</h1>
         <p style={{ fontSize: 17, color: '#4B5563', margin: 0 }}>무제한 기록, 무광고, 깊은 분석</p>
       </div>

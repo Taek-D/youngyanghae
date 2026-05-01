@@ -18,10 +18,10 @@
 
 ## 2. 로고 ⚠️
 
-- [x] 라이트 모드 가시 (`public/logo-light.svg`)
-- [x] 다크 모드 가시 (`public/logo-dark.svg`)
-- [x] 각진 정사각형 600×600 뷰박스
-- [ ] **TODO: SVG 플레이스홀더 → 최종 디자이너 PNG로 교체**
+- [x] 라이트 모드 가시 (`public/logo-light.png` — **600×600 PNG, 2026-04-26 적용**)
+- [x] 다크 모드 가시 (`public/logo-dark.svg` — 다크 PNG 자산 도착 시 교체 예정)
+- [x] 각진 정사각형 600×600
+- [x] 코드 참조 갱신 (IntroPage / PaywallPage → `/logo-light.png`)
 
 ## 3. 공통 네비게이션바 ✅
 
@@ -116,7 +116,7 @@ IAP_SKU.lifetime = 'ait.0000029518.4703587e.85fd9dff01.7129714550'
 ### Critical (심사 직전 필수)
 1. ✅ **SKU 교체** (2026-04-26 완료): `src/config/premiumConstants.ts`
 2. ✅ **광고 그룹 ID** (2026-04-26 완료): `.env` → `VITE_AD_GROUP_ID=ait.v2.live.3b81e8afba074454`
-3. ⏳ **로고 PNG**: `public/logo-{light,dark}.svg` → 디자이너 600×600 PNG
+3. ✅ **로고 PNG (라이트)** (2026-04-26 완료): `public/logo-light.png` 600×600 적용 — 다크 모드 PNG는 디자이너 자산 도착 시 추가
 4. ⏳ **코인 아이콘**: `public/icon-coin-mono.svg` → 실제 모노톤 이미지
 
 ### Important
