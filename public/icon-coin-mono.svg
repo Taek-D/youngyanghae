@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-  <!-- 네비게이션바 accessory 아이콘 — 모노톤 필수 (컬러 금지, 심사 반려) -->
-  <circle cx="24" cy="24" r="20" fill="none" stroke="#191F28" stroke-width="3"/>
-  <text x="24" y="32" font-family="'Toss Product Sans', sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#191F28">P</text>
-</svg>

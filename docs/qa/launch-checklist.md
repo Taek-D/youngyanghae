@@ -30,16 +30,13 @@
 navigationBar: {
   withBackButton: true,      // ✅
   withHomeButton: true,      // ✅
-  initialAccessoryButton: {
-    id: 'points',
-    icon: { name: 'icon-coin-mono' }  // ✅ 모노톤 (컬러 금지)
-  },
+  // 액세서리 버튼 미사용 — 깔끔한 네비바 유지 (포인트는 설정·페이월에서만 노출)
 }
 ```
 
 - [x] 자체 헤더·백버튼 0건 (코드 grep 확인)
-- [x] 액세서리 최대 1개
-- [x] 모노톤 아이콘만
+- [x] 액세서리 버튼 미사용 (모노톤 아이콘 검증 불필요)
+- [x] `initialAccessoryButton` 항목 제거 (2026-04-26)
 
 ## 4. 첫 화면 뒤로가기 ✅
 
@@ -117,7 +114,7 @@ IAP_SKU.lifetime = 'ait.0000029518.4703587e.85fd9dff01.7129714550'
 1. ✅ **SKU 교체** (2026-04-26 완료): `src/config/premiumConstants.ts`
 2. ✅ **광고 그룹 ID** (2026-04-26 완료): `.env` → `VITE_AD_GROUP_ID=ait.v2.live.3b81e8afba074454`
 3. ✅ **로고 PNG (라이트)** (2026-04-26 완료): `public/logo-light.png` 600×600 적용 — 다크 모드 PNG는 디자이너 자산 도착 시 추가
-4. ⏳ **코인 아이콘**: `public/icon-coin-mono.svg` → 실제 모노톤 이미지
+4. ✅ **코인 아이콘 불필요** (2026-04-26 결정): 액세서리 버튼 자체를 제거하여 모노톤 아이콘 요구사항 자동 해소
 
 ### Important
 5. **BottomTabBar 이모지**: 모노톤 SVG 아이콘 교체 (심사는 통과하지만 UX 개선)

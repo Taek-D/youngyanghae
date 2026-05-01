@@ -73,7 +73,7 @@
 - [ ] 어디에도 `alert()`, `confirm()`, `prompt()` 사용 없음 (**코드 TODO**: Settings·Paywall·Edit의 alert/confirm을 TDS Dialog로 교체 필요)
 - [ ] 자체 헤더/백버튼 UI 없음 (공통 네비게이션바만)
 - [ ] 핀치줌 비활성화 (두 손가락 확대 불가)
-- [ ] 네비게이션 액세서리 아이콘 모노톤
+- [x] 네비게이션 액세서리 버튼 미사용 (granite.config에서 제거 — 모노톤 검증 불필요)
 - [ ] 첫 화면 백버튼 = 앱 종료
 - [ ] 외부 앱·브라우저 이동 없음
 - [ ] 앱 설치 유도 문구·배너 없음
@@ -92,7 +92,7 @@
 3. `src/pages/SupplementEditPage.tsx`: `alert()`, `confirm()` → TDS Dialog 교체
 4. `src/pages/SettingsPage.tsx`: `alert()`, `confirm()` → TDS Dialog 교체
 5. `public/logo-*.svg` → 디자이너 PNG 600×600으로 교체
-6. `public/icon-coin-mono.svg` → 실제 앱 아이콘으로 교체
+6. ~~`public/icon-coin-mono.svg` → 실제 앱 아이콘으로 교체~~ (액세서리 버튼 제거로 불필요)
 7. `src/config/premiumConstants.ts`: `IAP_SKU` 실제 발급 SKU로 교체
 8. `.env`: `VITE_AD_GROUP_ID` 실제 값 설정
 9. `BottomTabBar` 이모지 → 모노톤 SVG 아이콘 교체

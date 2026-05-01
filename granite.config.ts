@@ -6,7 +6,7 @@ import { defineConfig } from '@apps-in-toss/web-framework/config';
  * 심사 규정 준수 사항:
  * - 공통 네비게이션바만 사용 (자체 헤더·백버튼 금지)
  * - 첫 화면 백버튼 = 미니앱 종료
- * - 액세서리 버튼은 최대 1개, 모노톤 아이콘만
+ * - 액세서리 버튼 미사용 (포인트 잔액은 설정·페이월 화면에서만 노출)
  * - brand.displayName은 index.html <title>과 정확히 일치
  */
 export default defineConfig({
@@ -18,11 +18,6 @@ export default defineConfig({
   navigationBar: {
     withBackButton: true,
     withHomeButton: true,
-    initialAccessoryButton: {
-      id: 'points',
-      title: 'Points',
-      icon: { name: 'icon-coin-mono' }, // 모노톤 필수 — 컬러 아이콘 사용 시 심사 반려
-    },
   },
   web: {
     host: 'localhost',
